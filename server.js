@@ -23,7 +23,7 @@ app.use(express.urlencoded({
 /* -------------------------------------------------------------------------- */
 
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(express.static("db"));
+app.use(express.static(path.join(__dirname, "db")));
 
 /* ----------------------------- set empty array ---------------------------- */
 let newNote = [];
@@ -49,7 +49,7 @@ app.get("/notes", function (req, res) {
 // server ; add it to the .json file and send it back to the browser?
 /* ------------send back json data---------------- */
 app.get("/api/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "db/db.json"));
+    res.sendFile(path.join(__dirname, "./db/db.json"));
 });
 
 /* ------------------------------- post method ------------------------------ */
@@ -59,7 +59,7 @@ app.post("/api/notes", function (req, res) {
 
     /* ------------------- reading the contents(data) of the file ------------------ */
 
-    fs.readFile("db/db.json", "utf-8", function (err, data) {
+    fs.readFile("./db/db.json", "utf-8", function (err, data) {
         if (err) throw err;
 
 
@@ -84,7 +84,7 @@ app.post("/api/notes", function (req, res) {
         //     if (err) return console.log(err);
         //     console.log('inserted');
 
-        fs.writeFile("db/db.json", JSON.stringify(notes, null, 2), "utf-8", function (err, data) {
+        fs.writeFile("./db/db.json", JSON.stringify(notes, null, 2), "utf-8", function (err, data) {
             res.status(200).send("Note Saved");
         });
 
@@ -93,7 +93,7 @@ app.post("/api/notes", function (req, res) {
 
 app.delete("/api/notes/:id", function (req, res) {
     const deleteId = req.params.id;
-    fs.readFile("db/db.json", "utf8", function (error, response) {
+    fs.readFile("./db/db.json", "utf8", function (error, response) {
         if (error) {
             console.log(error);
         }
@@ -104,7 +104,7 @@ app.delete("/api/notes/:id", function (req, res) {
             for (let i = 0; i < notes.length; i++) {
                 notes[i].id = i + 1;
             }
-            fs.writeFile("db/db.json", JSON.stringify(notes, null, 2), function (err) {
+            fs.writeFile("./db/db.json", JSON.stringify(notes, null, 2), function (err) {
                 if (err) throw err;
             });
         } else {
