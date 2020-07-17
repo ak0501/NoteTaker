@@ -58,10 +58,10 @@ app.post("/api/notes", function (req, res) {
     console.log(req.body);
 
     /* ------------------- reading the contents(data) of the file ------------------ */
-
+    // send data as string
     fs.readFile("./db/db.json", "utf-8", function (err, data) {
         if (err) throw err;
-
+        let note;
 
         /* -------- json.parse changes text into js object and push it into notes array ------- */
         let notes = JSON.parse(data);
@@ -71,14 +71,28 @@ app.post("/api/notes", function (req, res) {
         const noteId = notes.length + 1;
         console.log("id: ", noteId);
         noteRequest = req.body;
-        const newNote = {
-            id: noteId,
-            title: noteRequest.title,
-            text: noteRequest.text
-        };
 
-        notes.push(req.body);
-        res.json(notes);
+
+
+        if (req.body.id) {
+            notes = notes.filter((note) => {
+
+                return note.id !== req.body.id;
+
+            });
+
+            newNote = req.body;
+        } else {
+            newNote = {
+                id: noteId,
+                title: noteRequest.title,
+                text: noteRequest.text
+            };
+        }
+
+
+        notes.push(newNote);
+        // res.json(notes);
 
         // fs.writeFile('db/db.json', JSON.stringify(notes), function (err) {
         //     if (err) return console.log(err);
